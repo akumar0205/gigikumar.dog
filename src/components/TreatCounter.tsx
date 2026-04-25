@@ -1,139 +1,212 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-interface Treat {
+interface FlyingTreat {
   id: number;
+  emoji: string;
   angle: number;
+  startX: number;
 }
 
-let treatIdCounter = 0;
+const treatMenu = [
+  { emoji: '🦴', label: 'Bone', points: 1 },
+  { emoji: '🥩', label: 'Steak', points: 3 },
+  { emoji: '🥓', label: 'Bacon', points: 5 },
+  { emoji: '🧀', label: 'Cheese', points: 2 },
+  { emoji: '🥕', label: 'Carrot', points: 0.5 },
+  { emoji: '🍕', label: 'Pizza', points: 4 },
+];
+
+const moodMessages = [
+  { threshold: 0, msg: 'Gigi is watching... waiting...', face: '👀' },
+  { threshold: 5, msg: "Gigi's tail is wagging!", face: '🐕' },
+  { threshold: 15, msg: 'Gigi is VERY excited', face: '🤩' },
+  { threshold: 30, msg: 'Gigi has entered maximum happiness mode', face: '🥳' },
+  { threshold: 50, msg: 'Gigi has ascended to a higher plane of treats', face: '✨' },
+];
+
+function getMood(happiness: number) {
+  let current = moodMessages[0];
+  for (const m of moodMessages) {
+    if (happiness >= m.threshold) current = m;
+  }
+  return current;
+}
+
+let flyingId = 0;
 
 export default function TreatCounter() {
   const [treatCount, setTreatCount] = useState(() => {
     if (typeof window === 'undefined') return 0;
     return parseInt(localStorage.getItem('gigi-treats') || '0', 10);
   });
-  const [flyingTreats, setFlyingTreats] = useState<Treat[]>([]);
-  const [isWiggling, setIsWiggling] = useState(false);
+  const [happiness, setHappiness] = useState(() => {
+    if (typeof window === 'undefined') return 0;
+    return parseFloat(localStorage.getItem('gigi-happiness') || '0');
+  });
+  const [flyingTreats, setFlyingTreats] = useState<FlyingTreat[]>([]);
+  const [gigiReaction, setGigiReaction] = useState('');
+  const [isBouncing, setIsBouncing] = useState(false);
 
-  const handleGiveTreat = useCallback(() => {
+  const handleGiveTreat = useCallback((treat: typeof treatMenu[0]) => {
     const newCount = treatCount + 1;
     setTreatCount(newCount);
     localStorage.setItem('gigi-treats', String(newCount));
 
-    const newTreat: Treat = {
-      id: treatIdCounter++,
-      angle: Math.random() * 40 - 20,
-    };
-    setFlyingTreats((prev) => [...prev, newTreat]);
+    const newHappiness = Math.min(happiness + treat.points, 100);
+    setHappiness(newHappiness);
+    localStorage.setItem('gigi-happiness', String(newHappiness));
 
-    setIsWiggling(true);
-    setTimeout(() => setIsWiggling(false), 600);
+    const newFlying: FlyingTreat = {
+      id: flyingId++,
+      emoji: treat.emoji,
+      angle: Math.random() * 60 - 30,
+      startX: Math.random() * 100 - 50,
+    };
+    setFlyingTreats((prev) => [...prev, newFlying]);
+
+    const reactions = [
+      'Nom nom nom!', '*tail wagging intensifies*', 'Woof!', '*happy panting*',
+      'MORE.', '*drools*', 'Best day ever!', '*spins in circles*',
+      'Did someone say ' + treat.label.toLowerCase() + '?!', 'WOOF WOOF!',
+    ];
+    setGigiReaction(reactions[Math.floor(Math.random() * reactions.length)]);
+    setTimeout(() => setGigiReaction(''), 2000);
+
+    setIsBouncing(true);
+    setTimeout(() => setIsBouncing(false), 600);
 
     setTimeout(() => {
-      setFlyingTreats((prev) => prev.filter((t) => t.id !== newTreat.id));
+      setFlyingTreats((prev) => prev.filter((t) => t.id !== newFlying.id));
     }, 1200);
-  }, [treatCount]);
+  }, [treatCount, happiness]);
 
-  const treatEmojis = ['🦴', '🥩', '🍖', '🧇', '🥓'];
-  const displayTreats = treatEmojis.slice(0, Math.min(treatCount, 5));
-  const overflow = treatCount > 5;
+  const recentTreats = treatMenu
+    .filter(() => treatCount > 0)
+    .slice(0, 3);
+
+  const mood = getMood(happiness);
+
+  const barColor = happiness < 20 ? 'bg-blue-400'
+    : happiness < 50 ? 'bg-gold'
+    : happiness < 80 ? 'bg-orange-400'
+    : 'bg-green-400';
 
   return (
     <div className="flex flex-col items-center">
-      <h3 className="mb-6 font-mono text-xl tracking-widest text-gold md:text-2xl">
+      <h3 className="mb-4 font-mono text-xl tracking-widest text-gold md:text-2xl">
         GIVE GIGI A TREAT
       </h3>
 
-      <div className="relative mb-4">
+      <motion.div
+        className="mb-6 flex flex-col items-center"
+        animate={isBouncing ? { scale: [1, 1.2, 0.95, 1.05, 1] } : {}}
+        transition={isBouncing ? { duration: 0.5 } : {}}
+      >
+        <span className="text-6xl md:text-7xl">{mood.face}</span>
+      </motion.div>
+
+      <AnimatePresence mode="wait">
+        {gigiReaction && (
+          <motion.div
+            key={gigiReaction}
+            initial={{ opacity: 0, y: 5, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -5, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="mb-4 font-mono text-sm italic tracking-wide text-gold/80"
+          >
+            {gigiReaction}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="mb-4 w-full max-w-xs">
+        <div className="mb-1.5 flex items-center justify-between">
+          <span className="font-mono text-[10px] tracking-widest uppercase text-cream/30">Happiness</span>
+          <span className="font-mono text-[10px] tracking-widest text-cream/30">{Math.round(happiness)}%</span>
+        </div>
+        <div className="h-2 overflow-hidden rounded-full bg-cream/5">
+          <motion.div
+            className={`h-full rounded-full ${barColor}`}
+            initial={false}
+            animate={{ width: `${happiness}%` }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          />
+        </div>
+      </div>
+
+      <p className="mb-5 font-mono text-xs tracking-wider text-cream/40">{mood.msg}</p>
+
+      <div className="relative mb-5">
         <AnimatePresence>
           {flyingTreats.map((treat) => (
             <motion.div
               key={treat.id}
               className="absolute left-1/2 top-1/2 z-20 text-4xl"
-              initial={{ opacity: 1, scale: 0.3, x: '-50%', y: '-50%' }}
+              initial={{ opacity: 1, scale: 0.5, x: `calc(-50% + ${treat.startX}px)`, y: '-20%' }}
               animate={{
                 opacity: 0,
-                scale: 1.5,
-                y: '-400%',
+                scale: 1.8,
+                y: '-500%',
                 x: `calc(-50% + ${treat.angle}px)`,
-                rotate: treat.angle * 5,
+                rotate: treat.angle * 8,
               }}
-              transition={{ duration: 1.2, ease: 'easeOut' }}
+              transition={{ duration: 1, ease: 'easeOut' }}
             >
-              🦴
+              {treat.emoji}
             </motion.div>
           ))}
         </AnimatePresence>
+      </div>
 
-        <motion.button
-          onClick={handleGiveTreat}
-          className="group relative rounded-full bg-gradient-to-br from-gold to-amber-600 px-8 py-4 font-mono text-base font-bold tracking-widest text-dark shadow-lg shadow-gold/20 transition-transform duration-100 hover:scale-105 hover:shadow-xl hover:shadow-gold/30 active:scale-95 md:px-10 md:py-5 md:text-lg"
-          animate={isWiggling ? { rotate: [0, -3, 3, -2, 2, 0] } : {}}
-          transition={isWiggling ? { duration: 0.6 } : {}}
-        >
-          <span className="relative z-10">GIVE TREAT 🦴</span>
-        </motion.button>
+      <div className="mb-5 grid grid-cols-3 gap-3 sm:grid-cols-6">
+        {treatMenu.map((treat) => (
+          <motion.button
+            key={treat.emoji}
+            onClick={() => handleGiveTreat(treat)}
+            className="group flex flex-col items-center gap-1 rounded-xl border border-cream/10 bg-cream/[0.03] px-3 py-2.5 transition-all hover:border-gold/30 hover:bg-gold/10 active:scale-95"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <span className="text-2xl transition-transform group-hover:scale-110">{treat.emoji}</span>
+            <span className="font-mono text-[10px] tracking-wider text-cream/40 group-hover:text-gold/80">
+              {treat.label}
+            </span>
+            {treat.points > 0 && (
+              <span className="font-mono text-[9px] text-gold/40">
+                +{treat.points}
+              </span>
+            )}
+            {treat.points === 0.5 && (
+              <span className="font-mono text-[9px] text-cream/20">
+                meh
+              </span>
+            )}
+          </motion.button>
+        ))}
       </div>
 
       <motion.div
         className="text-center"
         key={treatCount}
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <p className="font-mono text-sm tracking-widest text-cream/60">
+        <p className="font-mono text-sm tracking-widest text-cream/50">
           <span className="text-gold">{treatCount}</span>{' '}
           {treatCount === 1 ? 'treat' : 'treats'} given
         </p>
-
-        {treatCount > 0 && (
-          <div className="mt-3 flex items-center justify-center gap-1 text-2xl">
-            {displayTreats.map((emoji, i) => (
-              <motion.span
-                key={i}
-                initial={{ scale: 0, rotate: -180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: i * 0.05, type: 'spring', stiffness: 300 }}
-              >
-                {emoji}
-              </motion.span>
-            ))}
-            {overflow && (
-              <span className="font-mono text-sm text-cream/40">
-                +{treatCount - 5}
-              </span>
-            )}
-          </div>
-        )}
       </motion.div>
 
-      {treatCount >= 10 && treatCount < 20 && (
+      {happiness >= 80 && (
         <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mt-3 font-mono text-xs tracking-wider text-green-400/70"
         >
-          Gigi is enjoying the treats! 🐶
-        </motion.p>
-      )}
-      {treatCount >= 20 && treatCount < 50 && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
-        >
-          That{"'"}s a lot of treats... Gigi approves 🐾
-        </motion.p>
-      )}
-      {treatCount >= 50 && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
-        >
-          Gigi has entered a food coma. Still accepting treats. 😴🦴
+          MAXIMUM HAPPINESS ACHIEVED ✨
         </motion.p>
       )}
     </div>
