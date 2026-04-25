@@ -15,4 +15,5 @@ dist/
 
 # Environment
 .env
-.env.*
+.env.**.JPG
+README_old.md

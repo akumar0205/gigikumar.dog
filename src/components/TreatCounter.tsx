@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Treat {
@@ -40,15 +40,12 @@ export default function TreatCounter() {
   const overflow = treatCount > 5;
 
   return (
-    <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-20">
-      <h2 className="mb-2 font-mono text-sm tracking-[0.3em] uppercase text-cream/50">
-        Section 2
-      </h2>
-      <h3 className="mb-8 font-mono text-xl tracking-widest text-gold md:text-2xl">
+    <div className="flex flex-col items-center">
+      <h3 className="mb-6 font-mono text-xl tracking-widest text-gold md:text-2xl">
         GIVE GIGI A TREAT
       </h3>
 
-      <div className="relative mb-8">
+      <div className="relative mb-4">
         <AnimatePresence>
           {flyingTreats.map((treat) => (
             <motion.div
@@ -71,7 +68,7 @@ export default function TreatCounter() {
 
         <motion.button
           onClick={handleGiveTreat}
-          className="group relative rounded-full bg-gradient-to-br from-gold to-amber-600 px-10 py-5 font-mono text-lg font-bold tracking-widest text-dark shadow-lg shadow-gold/20 transition-transform duration-100 hover:scale-105 hover:shadow-xl hover:shadow-gold/30 active:scale-95"
+          className="group relative rounded-full bg-gradient-to-br from-gold to-amber-600 px-8 py-4 font-mono text-base font-bold tracking-widest text-dark shadow-lg shadow-gold/20 transition-transform duration-100 hover:scale-105 hover:shadow-xl hover:shadow-gold/30 active:scale-95 md:px-10 md:py-5 md:text-lg"
           animate={isWiggling ? { rotate: [0, -3, 3, -2, 2, 0] } : {}}
           transition={isWiggling ? { duration: 0.6 } : {}}
         >
@@ -92,7 +89,7 @@ export default function TreatCounter() {
         </p>
 
         {treatCount > 0 && (
-          <div className="mt-4 flex items-center justify-center gap-1 text-2xl">
+          <div className="mt-3 flex items-center justify-center gap-1 text-2xl">
             {displayTreats.map((emoji, i) => (
               <motion.span
                 key={i}
@@ -116,7 +113,7 @@ export default function TreatCounter() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 font-mono text-xs tracking-wider text-gold/60"
+          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
         >
           Gigi is enjoying the treats! 🐶
         </motion.p>
@@ -125,7 +122,7 @@ export default function TreatCounter() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 font-mono text-xs tracking-wider text-gold/60"
+          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
         >
           That{"'"}s a lot of treats... Gigi approves 🐾
         </motion.p>
@@ -134,11 +131,11 @@ export default function TreatCounter() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4 font-mono text-xs tracking-wider text-gold/60"
+          className="mt-3 font-mono text-xs tracking-wider text-gold/60"
         >
           Gigi has entered a food coma. Still accepting treats. 😴🦴
         </motion.p>
       )}
-    </section>
+    </div>
   );
 }

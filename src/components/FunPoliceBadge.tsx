@@ -29,7 +29,7 @@ export default function FunPoliceBadge() {
     { label: 'Title', value: 'Chief, Fun Police Dept.' },
     { label: 'Badge #', value: '#K9-GIGI-001' },
     { label: 'Status', value: 'On Duty', highlight: true },
-    { label: 'Specialties', value: 'Barking at nothing, Sitting on laps during important meetings, Confiscating squeaky toys, Stopping fun professionally' },
+    { label: 'Specialties', value: 'Barking at nothing, Sitting on laps during important meetings, Chasing squirrels and birds, Stopping fun professionally' },
   ];
 
   return (
@@ -53,9 +53,6 @@ export default function FunPoliceBadge() {
         />
       </div>
 
-      <h2 className="mb-2 font-mono text-sm tracking-[0.3em] uppercase text-cream/50">
-        Section 3
-      </h2>
       <h3 className="mb-10 font-mono text-xl tracking-widest text-gold md:text-2xl">
         FUN POLICE DEPARTMENT
       </h3>
@@ -137,7 +134,7 @@ export default function FunPoliceBadge() {
       </motion.div>
 
       <p className="mt-8 max-w-md text-center font-mono text-xs leading-relaxed text-cream/30">
-        Gigi takes her job very seriously. No fun goes unstopped. No lap goes unsat upon. No squeaky toy survives confiscation.
+        Gigi takes her job very seriously. No fun goes unstopped. No lap goes unsat upon. No squirrel or bird goes unchased.
       </p>
     </section>
   );

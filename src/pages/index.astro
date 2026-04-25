@@ -33,11 +33,11 @@ import FunPoliceBadge from '../components/FunPoliceBadge';
           Chief of the Fun Police 🚨
         </p>
         <p class="max-w-sm font-sans text-sm leading-relaxed text-cream/40">
-          Professional fun-stopper. Lap-sitter extraordinaire. Confiscator of squeaky toys. On duty 24/7.
+          Professional fun-stopper. Lap-sitter extraordinaire. Relentless chaser of squirrels and birds. On duty 24/7.
         </p>
 
         <a
-          href="#pet"
+          href="#interact"
           class="group mt-10 flex items-center gap-2 rounded-full border border-cream/10 bg-cream/5 px-6 py-3 font-mono text-xs tracking-wider text-cream/60 transition-all hover:border-gold/30 hover:bg-gold/10 hover:text-gold"
         >
           MEET GIGI
@@ -59,15 +59,16 @@ import FunPoliceBadge from '../components/FunPoliceBadge';
     <div class="mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-cream/10 to-transparent"></div>
   </div>
 
-  <div id="pet">
-    <PetGigi client:load />
-  </div>
-
-  <div class="pointer-events-none relative z-0">
-    <div class="mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-gold/10 to-transparent"></div>
-  </div>
-
-  <TreatCounter client:load />
+  <section id="interact" class="relative z-10 flex min-h-screen flex-col items-center justify-center gap-16 px-6 py-20 md:flex-row md:gap-12">
+    <div class="flex-1">
+      <PetGigi client:load />
+    </div>
+    <div class="hidden h-48 w-px bg-gradient-to-b from-transparent via-cream/10 to-transparent md:block"></div>
+    <div class="h-px w-48 bg-gradient-to-r from-transparent via-cream/10 to-transparent md:hidden"></div>
+    <div class="flex-1">
+      <TreatCounter client:load />
+    </div>
+  </section>
 
   <div class="pointer-events-none relative z-0">
     <div class="mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-siren-red/10 to-transparent"></div>

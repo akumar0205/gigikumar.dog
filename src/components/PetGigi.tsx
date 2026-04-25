@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 
 interface Heart {
@@ -23,16 +23,6 @@ export default function PetGigi() {
   const mouseY = useMotionValue(0);
   const imgX = useSpring(0, { stiffness: 50, damping: 20 });
   const imgY = useSpring(0, { stiffness: 50, damping: 20 });
-
-  useEffect(() => {
-    const unsubscribe = mouseX.on('change', (v) => imgX.set(v));
-    return unsubscribe;
-  }, [mouseX, imgX]);
-
-  useEffect(() => {
-    const unsubscribe = mouseY.on('change', (v) => imgY.set(v));
-    return unsubscribe;
-  }, [mouseY, imgY]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -89,7 +79,7 @@ export default function PetGigi() {
   );
 
   return (
-    <section className="relative z-10 flex min-h-screen flex-col items-center justify-center px-6 py-20">
+    <div className="flex flex-col items-center">
       {zoomies && (
         <div className="zoomies-overlay pointer-events-none fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-dark/50" style={{ animation: 'zoomies-shake 0.3s infinite' }} />
@@ -125,10 +115,7 @@ export default function PetGigi() {
         </div>
       )}
 
-      <h2 className="mb-2 font-mono text-sm tracking-[0.3em] uppercase text-cream/50">
-        Section 1
-      </h2>
-      <h3 className="mb-8 font-mono text-xl tracking-widest text-gold md:text-2xl">
+      <h3 className="mb-6 font-mono text-xl tracking-widest text-gold md:text-2xl">
         PET GIGI
       </h3>
 
@@ -145,9 +132,9 @@ export default function PetGigi() {
         }}
       >
         <motion.img
-          src="/images/gigi.jpg"
-          alt="Gigi - Chief of the Fun Police"
-          className="h-[26rem] w-[26rem] rounded-2xl object-cover shadow-2xl shadow-black/50 md:h-[32rem] md:w-[32rem]"
+          src="/images/gigi2.jpg"
+          alt="Pet Gigi"
+          className="h-[20rem] w-[20rem] rounded-2xl object-cover shadow-2xl shadow-black/50 md:h-[26rem] md:w-[26rem]"
           animate={zoomies ? { rotate: [0, 360] } : {}}
           transition={zoomies ? { duration: 0.5, repeat: 6, ease: 'linear' } : {}}
           drag={false}
@@ -172,20 +159,20 @@ export default function PetGigi() {
       </AnimatePresence>
 
       <motion.p
-        className="mt-8 font-mono text-sm tracking-widest text-cream/60"
+        className="mt-6 font-mono text-sm tracking-widest text-cream/60"
         key={petCount}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        Gigi has been pet{' '}
+        Petted{' '}
         <span className="text-gold">{petCount}</span>{' '}
         {petCount === 1 ? 'time' : 'times'} 💛
       </motion.p>
 
-      <p className="mt-3 text-xs tracking-wider text-cream/30">
+      <p className="mt-2 text-xs tracking-wider text-cream/30">
         Try clicking really fast...
       </p>
-    </section>
+    </div>
   );
 }
