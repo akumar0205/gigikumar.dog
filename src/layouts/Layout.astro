@@ -1,0 +1,41 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Gigi Kumar - Chief of the Fun Police",
+  description = "Goodest Goid in the world. Chief of the Fun Police Department. Fun stopped professionally since birth.",
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="description" content={description} />
+    <meta property="og:site_name" content="Gigi Kumar" />
+    <meta property="og:title" content={title} />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://gigikumar.dog/images/gigi.jpg" />
+    <meta property="og:url" content="https://gigikumar.dog" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://gigikumar.dog" />
+    <link
+      href="https://fonts.googleapis.com/css2?display=swap&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <title>{title}</title>
+  </head>
+  <body class="font-sans antialiased">
+    <slot />
+  </body>
+</html>
