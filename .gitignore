@@ -22,3 +22,9 @@ dist/
 *.JPEG
 Gigi_photo.jpg
 README_old.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
