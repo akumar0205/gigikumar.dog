@@ -15,5 +15,10 @@ dist/
 
 # Environment
 .env
-.env.**.JPG
+.env.*
+
+# Source photos (optimized versions are in public/images/)
+*.JPG
+*.JPEG
+Gigi_photo.jpg
 README_old.md
