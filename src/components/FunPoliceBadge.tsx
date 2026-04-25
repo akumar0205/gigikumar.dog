@@ -113,8 +113,12 @@ export default function FunPoliceBadge() {
         </div>
 
         <div className="mb-6 mt-4 flex items-center gap-4 border-b border-cream/10 pb-6">
-          <div className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold/20 to-gold/5 ring-2 ring-gold/30">
-            <span className="text-4xl">🐕‍🦺</span>
+          <div className="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-gold/30">
+            <img
+              src="/images/gigi3.jpg"
+              alt="Chief Gigi - Mugshot"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div>
             <p className="font-mono text-lg font-bold tracking-wider text-cream">
