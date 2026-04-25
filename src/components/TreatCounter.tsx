@@ -10,11 +10,11 @@ interface FlyingTreat {
 
 const treatMenu = [
   { emoji: '🦴', label: 'Bone', points: 1 },
-  { emoji: '🥩', label: 'Steak', points: 3 },
+  { emoji: '🥩', label: 'Steak', points: 5 },
   { emoji: '🥓', label: 'Bacon', points: 5 },
   { emoji: '🧀', label: 'Cheese', points: 2 },
   { emoji: '🥕', label: 'Carrot', points: 0.5 },
-  { emoji: '🍕', label: 'Pizza', points: 4 },
+  { emoji: '🍕', label: 'Pizza', points: 3 },
 ];
 
 const moodMessages = [
