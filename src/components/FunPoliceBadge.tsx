@@ -48,7 +48,7 @@ export default function FunPoliceBadge() {
   };
 
   const badgeItems = [
-    { label: 'Name', value: 'Gigi Kumar' },
+    { label: 'Name', value: 'Gigi Kumar Young' },
     { label: 'Title', value: 'Chief, Fun Police Dept.' },
     { label: 'Badge #', value: '#K9-GIGI-001' },
     { label: 'Status', value: 'On Duty', highlight: true },
